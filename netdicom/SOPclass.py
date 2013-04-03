@@ -761,6 +761,54 @@ class EnhancedStructuredReportSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.88.22'
 
 
+class VideoEndoscopicImageStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.77.1.1.1'
+
+class VLMicroscopicImageStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.77.1.2'
+
+class VideoMicroscopicImageStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.77.1.2.1'
+
+class VLSlideCoordinatesMicroscopicImageStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.77.1.3'
+
+class VLPhotographicImageStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.77.1.4'
+
+class VideoPhotographicImageStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.77.1.4.1'
+
+class OphthalmicPhotography8BitImageStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.77.1.5.1'
+
+class OphthalmicPhotography16BitImageStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.77.1.5.2'
+
+class StereometricRelationshipStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.77.1.5.3'
+
+class UltrasoundImageStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.6.1'
+
+class RawDataStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.66'
+
+class SpatialRegistrationStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.66.1'
+
+class SpatialFiducialsStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.66.2'
+
+class DeformableSpatialRegistrationStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.66.3'
+
+class SegmentationStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.66.4'
+
+class RealWorldValueMappingStorageSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.67'
+    
 
 # QUERY RETRIEVE SOP Classes
 class QueryRetrieveSOPClass(QueryRetrieveServiceClass):

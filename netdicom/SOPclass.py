@@ -600,6 +600,7 @@ class VerificationSOPClass(VerificationServiceClass):
 
 
 # STORAGE SOP CLASSES
+# Slowly adding everything from http://www.dicomlibrary.com/dicom/sop/
 class StorageSOPClass(StorageServiceClass):
     pass
 

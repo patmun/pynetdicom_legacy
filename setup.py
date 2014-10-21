@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# pip workaround (see: https://github.com/pypa/pip/issues/1979)
+import os
+os.chdir(os.path.abspath(os.path.dirname(__file__)))
+
 from distribute_setup import use_setuptools
 use_setuptools()
 

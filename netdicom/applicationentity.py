@@ -203,9 +203,9 @@ class Association(threading.Thread):
                 # check if idle timer has expired
                 logger.debug("checking DUL idle timer")
                 if self.DUL.idle_timer_expired():
-                    logger.warning('%s: DUL provider idle timer expired' % (self.name))  
+                    logger.warning('%s: DUL provider idle timer expired' % (self.name))
                     self.Kill()
- 
+
 
 
 
@@ -324,8 +324,8 @@ class AE(threading.Thread):
     def Quit(self):
         for aa in self.Associations:
             aa.Kill()
-            if self.LocalServerSocket:
-                self.LocalServerSocket.close()
+        if self.LocalServerSocket:
+            self.LocalServerSocket.close()
         self.__Quit = True
 
     def QuitOnKeyboardInterrupt(self):

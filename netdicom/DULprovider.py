@@ -198,7 +198,7 @@ class DULServiceProvider(Thread):
 
     def idle_timer_expired(self):
         """
-        Checks if the idle timer has expired and returns True if has, False 
+        Checks if the idle timer has expired and returns True if has, False
         otherwise
         """
         if self._idle_timer is None:
@@ -289,7 +289,9 @@ class DULServiceProvider(Thread):
             try:
                 self.SM.Action(evt, self)
             except:
+                # We mark the Thread as kill here
                 self.kill = True
+                raise
         logger.debug('%s: DUL loop ended' % self.name)
 
 

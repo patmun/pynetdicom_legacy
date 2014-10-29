@@ -269,8 +269,9 @@ class DULServiceProvider(Thread):
             #logger.debug('%s: starting DUL loop' % self.name)
             if self.kill:
                 break
-            # catch an event
+
             try:
+                # catch an event
                 if self.CheckNetwork():
                     if self._idle_timer is not None:
                         self._idle_timer.Restart()
@@ -279,8 +280,11 @@ class DULServiceProvider(Thread):
                 elif self.CheckTimer():
                     self.kill = True
             except:
+                # We mark the Thread as kill here
+                # Deal with: https://code.google.com/p/pynetdicom/issues/detail?id=17
                 self.kill = True
                 raise
+
             try:
                 evt = self.event.get(False)
             except Queue.Empty:
@@ -290,6 +294,7 @@ class DULServiceProvider(Thread):
                 self.SM.Action(evt, self)
             except:
                 # We mark the Thread as kill here
+                # Deal with: https://code.google.com/p/pynetdicom/issues/detail?id=14
                 self.kill = True
                 raise
         logger.debug('%s: DUL loop ended' % self.name)

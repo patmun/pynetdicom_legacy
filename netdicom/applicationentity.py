@@ -75,7 +75,11 @@ class Association(threading.Thread):
     def __getattr__(self, attr):
         # while not self.AssociationEstablished:
         #    time.sleep(0.001)
-        obj = eval(attr)()
+        try:
+           obj = eval(attr)()
+        except NameError:
+           raise AttributeError
+
         try:
             obj.pcid, obj.sopclass, obj.transfersyntax = \
                 [x for x in self.SOPClassesAsSCU if

@@ -44,7 +44,8 @@ class Association(threading.Thread):
         self.ClientSocket = ClientSocket
         self.AE = LocalAE
         self.DUL = DULServiceProvider(ClientSocket,
-                                      MaxIdleSeconds=self.AE.MaxAssociationIdleSeconds)
+                                      MaxIdleSeconds=self.AE.MaxAssociationIdleSeconds,
+                                      ConnectTimeoutSeconds=self.AE.ConnectTimeoutSeconds)
         self.RemoteAE = RemoteAE
         self._Kill = False
         threading.Thread.__init__(self)
@@ -239,6 +240,7 @@ class AE(threading.Thread):
         # maximum amount of time this association can be idle before it gets
         # terminated
         self.MaxAssociationIdleSeconds = None
+        self.ConnectTimeoutSeconds = None
         threading.Thread.__init__(self, name=self.LocalAE['AET'])
         self.daemon = True
         self.SOPUID = [x for x in self.SupportedSOPClassesAsSCP]

@@ -48,7 +48,7 @@ def recvn(sock, n):
 
 class DULServiceProvider(Thread):
 
-    def __init__(self, Socket=None, Port=None, Name='', MaxIdleSeconds=None):
+    def __init__(self, Socket=None, Port=None, Name='', MaxIdleSeconds=None, ConnectTimeoutSeconds=None):
         """Three ways to call DULServiceProvider. If a port number is given,
         the DUL will wait for incoming connections on this port. If a socket
         is given, the DUL will use this socket as the client socket. If none
@@ -77,6 +77,7 @@ class DULServiceProvider(Thread):
         self._idle_timer = None
         if MaxIdleSeconds is not None and MaxIdleSeconds > 0:
             self._idle_timer = timer.Timer(MaxIdleSeconds)
+        self.ConnectTimeoutSeconds = ConnectTimeoutSeconds
         self.Timer = timer.Timer(10)
         self.SM = fsm.StateMachine(self)
 

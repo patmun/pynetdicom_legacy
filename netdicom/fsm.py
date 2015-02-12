@@ -22,8 +22,12 @@ def AE_1(provider):
     provider.RemoteClientSocket = socket.socket(
         socket.AF_INET, socket.SOCK_STREAM)
     try:
+        timeout_original = provider.RemoteClientSocket.gettimeout()
+        if provider.ConnectTimeoutSeconds is not None:
+            provider.RemoteClientSocket.settimeout(provider.ConnectTimeoutSeconds)
         provider.RemoteClientSocket.connect(
             provider.primitive.CalledPresentationAddress)
+        provider.RemoteClientSocket.settimeout(timeout_original)
     except socket.error:
         # cannot connect
         provider.ToServiceUser.put(None)

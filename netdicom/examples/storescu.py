@@ -52,7 +52,7 @@ def OnAssociateResponse(association):
     print "Association response received"
 
 # create application entity
-MyAE = AE(args.aet, 9999, [StorageSOPClass,  VerificationSOPClass], [], ts)
+MyAE = AE(args.aet, 0, [StorageSOPClass,  VerificationSOPClass], [], ts)
 MyAE.OnAssociateResponse = OnAssociateResponse
 
 # remote application entity

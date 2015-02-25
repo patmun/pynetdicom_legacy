@@ -26,7 +26,7 @@ parser = argparse.ArgumentParser(description='storage SCU example')
 parser.add_argument('remotehost')
 parser.add_argument('remoteport', type=int)
 parser.add_argument('searchstring')
-parser.add_argument('-p', help='local server port', type=int, default=9999)
+parser.add_argument('-p', help='local server port', type=int, default=0)
 parser.add_argument('-aet', help='calling AE title', default='PYNETDICOM')
 parser.add_argument('-aec', help='called AE title', default='REMOTESCU')
 parser.add_argument('-implicit', action='store_true',

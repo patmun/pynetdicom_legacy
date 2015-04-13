@@ -26,11 +26,11 @@ import struct
 import timer
 
 import logging
-logger = logging.getLogger('netdicom.applicationentity')
+logger = logging.getLogger(__name__)
 
 class Association(threading.Thread):
 
-    def __init__(self, LocalAE, ClientSocket=None, RemoteAE=None):
+    def __init__(self, LocalAE, ClientSocket=None, RemoteAE=None, AssociateRequestTimeout=30):
         if not ClientSocket and not RemoteAE:
             raise
         if ClientSocket and RemoteAE:
@@ -54,6 +54,7 @@ class Association(threading.Thread):
         self.SOPClassesAsSCU = []
         self.AssociationEstablished = False
         self.AssociationRefused = None
+        self.AssociateRequestTimeout = AssociateRequestTimeout
         self.start()
 
     def GetSOPClass(self, ds):
@@ -150,7 +151,8 @@ class Association(threading.Thread):
             ans = self.ACSE.Request(self.AE.LocalAE, self.RemoteAE,
                                     self.AE.MaxPDULength,
                                     self.AE.PresentationContextDefinitionList,
-                                    userspdu=ext)
+                                    userspdu=ext,
+                                    timeout=self.AssociateRequestTimeout)
             if ans:
                 # call back
                 if 'OnAssociateResponse' in self.AE.__dict__:
@@ -241,6 +243,7 @@ class AE(threading.Thread):
         # terminated
         self.MaxAssociationIdleSeconds = None
         self.ConnectTimeoutSeconds = None
+        self.AssociateRequestTimeout = 30
         threading.Thread.__init__(self, name=self.LocalAE['AET'])
         self.daemon = True
         self.SOPUID = [x for x in self.SupportedSOPClassesAsSCP]
@@ -351,7 +354,8 @@ class AE(threading.Thread):
 
     def RequestAssociation(self, remoteAE):
         """Requests association to a remote application entity"""
-        assoc = Association(self, RemoteAE=remoteAE)
+        assoc = Association(self, RemoteAE=remoteAE, AssociateRequestTimeout=self.AssociateRequestTimeout)
+
         while not assoc.AssociationEstablished \
                 and not assoc.AssociationRefused and not assoc.DUL.kill:
             time.sleep(0.1)
@@ -359,4 +363,5 @@ class AE(threading.Thread):
             self.Associations.append(assoc)
             return assoc
         else:
+            logger.debug("RequestAssociation: AssociationRefused=%s; DUL.kill=%s" % (assoc.AssociationRefused, assoc.DUL.kill))
             return None

@@ -363,5 +363,6 @@ class AE(threading.Thread):
             self.Associations.append(assoc)
             return assoc
         else:
-            logger.debug("RequestAssociation: AssociationRefused=%s; DUL.kill=%s" % (assoc.AssociationRefused, assoc.DUL.kill))
+            logger.debug("RequestAssociation: AssociationRefused=%s; DUL.kill=%s" % (assoc.AssociationRefused,
+                                                                                     assoc.DUL.kill))
             return None

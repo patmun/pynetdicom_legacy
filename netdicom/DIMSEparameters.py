@@ -57,7 +57,7 @@ class C_GET_ServiceParameters:
         self.Identifier = None
         self.Status = None
         self.NumberOfRemainingSubOperations = None
-        self.NumberOfCompleteSubOperations = None
+        self.NumberOfCompletedSubOperations = None
         self.NumberOfFailedSubOperations = None
         self.NumberOfWarningSubOperations = None
 
@@ -76,7 +76,7 @@ class C_MOVE_ServiceParameters:
         self.Identifier = None
         self.Status = None
         self.NumberOfRemainingSubOperations = None
-        self.NumberOfCompleteSubOperations = None
+        self.NumberOfCompletedSubOperations = None
         self.NumberOfFailedSubOperations = None
         self.NumberOfWarningSubOperations = None
 

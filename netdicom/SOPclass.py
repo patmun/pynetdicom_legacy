@@ -317,6 +317,47 @@ class QueryRetrieveGetSOPClass(QueryRetrieveServiceClass):
         xrange(0xC000, 0xCFFF + 1)
     )
 
+    def SCP(self, msg):
+        ds = dsutils.decode(msg.Identifier, self.transfersyntax.is_implicit_VR,
+                            self.transfersyntax.is_little_endian)
+
+        # make response
+        rsp = C_GET_ServiceParameters()
+        rsp.MessageIDBeingRespondedTo = msg.MessageID.value
+        rsp.AffectedSOPClassUID = msg.AffectedSOPClassUID.value
+        rsp.Status = int(self.Pending)
+
+        rsp.NumberOfRemainingSubOperations = 0
+        rsp.NumberOfCompletedSubOperations = 0
+        rsp.NumberOfFailedSubOperations = 0
+        rsp.NumberOfWarningSubOperations = 0
+
+        self.DIMSE.Send(rsp, self.pcid, self.maxpdulength)
+
+        gen = self.AE.OnReceiveGet(self, ds)
+        # # build C-STORE primitive
+        csto = C_STORE_ServiceParameters()
+        csto.MessageID = 0
+        for ds in gen:
+            csto.AffectedSOPClassUID = ds.SOPClassUID
+            csto.AffectedSOPInstanceUID = ds.SOPInstanceUID
+            csto.Priority = 0x0002
+            csto.DataSet = dsutils.encode(ds,
+                                          self.transfersyntax.is_implicit_VR,
+                                          self.transfersyntax.is_little_endian)
+            # send cstore request
+            self.DIMSE.Send(csto, self.pcid, self.maxpdulength)
+
+            # wait for c-store response
+            ans, id = self.DIMSE.Receive(Wait=True)
+            # TODO: Handle the answers coming back
+            # ans.Status
+
+        # TODO: Set various values on the rsp here
+        rsp.Status = int(self.Success)
+        self.DIMSE.Send(rsp, self.pcid, self.maxpdulength)
+
+
     def SCU(self, ds, msgid):
         # build C-GET primitive
         cget = C_GET_ServiceParameters()

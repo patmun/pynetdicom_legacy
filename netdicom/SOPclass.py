@@ -311,6 +311,11 @@ class QueryRetrieveGetSOPClass(QueryRetrieveServiceClass):
         'Sub-operations are continuing',
         xrange(0xFF00, 0xFF00 + 1)
     )
+    CannotUnderstand = Status(
+        'Failure',
+        'Error: Cannot understand',
+        xrange(0xC000, 0xCFFF + 1)
+    )
 
     def SCU(self, ds, msgid):
         # build C-GET primitive
@@ -341,17 +346,17 @@ class QueryRetrieveGetSOPClass(QueryRetrieveServiceClass):
                 rsp.MessageIDBeingRespondedTo = msg.MessageID
                 rsp.AffectedSOPInstanceUID = msg.AffectedSOPInstanceUID
                 rsp.AffectedSOPClassUID = msg.AffectedSOPClassUID
-                status = None
+
                 try:
                     d = dsutils.decode(
                         msg.DataSet, self.transfersyntax.is_implicit_VR,
                         self.transfersyntax.is_little_endian)
+                    SOPClass = UID2SOPClass(d.SOPClassUID)
+                    status = self.AE.OnReceiveStore(SOPClass, d)
                 except:
                     # cannot understand
-                    status = CannotUnderstand
+                    status = self.CannotUnderstand
 
-                SOPClass = UID2SOPClass(d.SOPClassUID)
-                status = self.AE.OnReceiveStore(SOPClass, d)
                 rsp.Status = int(status)
 
                 self.DIMSE.Send(rsp, id, self.maxpdulength)

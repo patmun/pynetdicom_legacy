@@ -464,9 +464,9 @@ class C_GET_RQ_Message(DIMSEMessage):
 
     def ToParams(self):
         tmp = C_GET_ServiceParameters()
-        tmp.MessageID = self.CommandSet[(0x0000, 0x0110)].value
-        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)].value
-        tmp.Priority = self.CommandSet[(0x0000, 0x0700)].value
+        tmp.MessageID = self.CommandSet[(0x0000, 0x0110)]
+        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)]
+        tmp.Priority = self.CommandSet[(0x0000, 0x0700)]
         tmp.Identifier = self.DataSet
         return tmp
 

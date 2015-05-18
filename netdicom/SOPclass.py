@@ -351,7 +351,8 @@ class QueryRetrieveGetSOPClass(QueryRetrieveServiceClass):
             # wait for c-store response
             ans, id = self.DIMSE.Receive(Wait=True)
             # TODO: Handle the answers coming back
-            # ans.Status
+            if self.Code2Status(ans.Status.value).Type != 'Success':
+                pass
 
         # TODO: Set various values on the rsp here
         rsp.Status = int(self.Success)

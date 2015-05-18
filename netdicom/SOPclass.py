@@ -752,8 +752,32 @@ class RTPlanStorageSOPClass(StorageSOPClass):
 class VLEndoscopicImageStorageSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.77.1.1'
 
+class SpatialRegistrationSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.66.1'
+
+class EnhancedSRSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.88.22'
+
 class XRayRadiationDoseStructuredReportSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.88.67'
+
+class DigitalXRayImageStorageForPresentationSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.1.1'
+
+class DigitalXRayImageStorageForProcessingSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.1.1.1'
+
+class DigitalMammographyXRayImageStorageForPresentationSOPClass(StorageSOPClass):  # noqa
+    UID = '1.2.840.10008.5.1.4.1.1.1.2'
+
+class DigitalMammographyXRayImageStorageForProcessingSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.1.2.1'
+
+class DigitalIntraOralXRayImageStorageForPresentationSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.1.3'
+
+class DigitalIntraOralXRayImageStorageForProcessingSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.1.3.1'
 
 class EnhancedStructuredReportSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.88.22'

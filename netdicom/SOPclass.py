@@ -759,9 +759,6 @@ class SpatialRegistrationSOPClass(StorageSOPClass):
 class EnhancedSRSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.88.22'
 
-class XRayRadiationDoseStructuredReportSOPClass(StorageSOPClass):
-    UID = '1.2.840.10008.5.1.4.1.1.88.67'
-
 class DigitalXRayImageStorageForPresentationSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.1.1'
 
@@ -779,9 +776,6 @@ class DigitalIntraOralXRayImageStorageForPresentationSOPClass(StorageSOPClass):
 
 class DigitalIntraOralXRayImageStorageForProcessingSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.1.3.1'
-
-class EnhancedStructuredReportSOPClass(StorageSOPClass):
-    UID = '1.2.840.10008.5.1.4.1.1.88.22'
 
 class VideoEndoscopicImageStorageSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.77.1.1.1'
@@ -830,6 +824,12 @@ class SegmentationStorageSOPClass(StorageSOPClass):
 
 class RealWorldValueMappingStorageSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.67'
+
+class XRayRadiationDoseStructuredReportSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.88.67'
+
+class EnhancedStructuredReportSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.88.22'
 
 
 # QUERY RETRIEVE SOP Classes

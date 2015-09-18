@@ -155,8 +155,8 @@ class Association(threading.Thread):
                                     timeout=self.AssociateRequestTimeout)
             if ans:
                 # call back
-                if 'OnAssociateResponse' in self.AE.__dict__:
-                    self.AE.OnAssociateResponse(ans)
+                if hasattr(self.AE, 'OnAssociateResponse'):
+                    self.AE.OnAssociateResponse(self)
             else:
                 self.AssociationRefused = True
                 self.DUL.Kill()

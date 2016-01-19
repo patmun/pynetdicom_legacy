@@ -15,11 +15,11 @@
 *.pyc
 
 # Build/dist files
-source/dist/*
-source/build/*
-source/pynetdicom.egg-info/*
-source/distribute*.egg
-source/distribute*.tar.gz
+dist/*
+build/*
+pynetdicom.egg-info/*
+distribute*.egg
+distribute*.tar.gz
 
 # Docs build
 docs/_build/*

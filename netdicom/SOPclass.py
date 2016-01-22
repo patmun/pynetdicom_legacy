@@ -581,7 +581,7 @@ class ModalityWorklistServiceSOPClass (BasicWorklistServiceClass):
         xrange(0xFF01, 0xFF01 + 1)
     )
 
-    def SCU(self, id):
+    def SCU(self, ds, msgid):
         # build C-FIND primitive
         cfind = C_FIND_ServiceParameters()
         cfind.MessageID = msgid

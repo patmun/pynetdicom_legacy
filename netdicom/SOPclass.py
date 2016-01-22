@@ -11,7 +11,7 @@ import ACSEprovider
 import time
 import logging
 
-logger = logging.getLogger('netdicom.SOPclass')
+logger = logging.getLogger(__name__)
 
 
 class Status(object):

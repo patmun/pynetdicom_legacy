@@ -25,7 +25,9 @@ from PDU import *
 import DULparameters
 import Queue
 import logging
-logger = logging.getLogger('netdicom.DUL')
+
+
+logger = logging.getLogger(__name__)
 
 
 class InvalidPrimitive(Exception):

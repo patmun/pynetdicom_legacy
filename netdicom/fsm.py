@@ -14,7 +14,7 @@ import DULparameters
 # Finite State machine action definitions
 
 import logging
-logger = logging.getLogger('netdicom.FSM')
+logger = logging.getLogger(__name__)
 
 
 def AE_1(provider):

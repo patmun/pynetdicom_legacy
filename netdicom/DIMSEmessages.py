@@ -19,7 +19,7 @@ import itertools
 
 import logging
 
-logger = logging.getLogger('netdicom.DIMSE')
+logger = logging.getLogger(__name__)
 
 
 DicomDictionary.update({

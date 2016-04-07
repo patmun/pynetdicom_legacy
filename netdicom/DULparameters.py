@@ -61,6 +61,9 @@ class A_ABORT_ServiceParameters:
         self.AbortSource = None
         self.UserInformation = None
 
+    def __str__(self):
+        return "AbortSource=%s, UserInformation=%s" % (self.AbortSource, self.UserInformation)
+
 #
 # A-P-ABORT Service parameters
 #
@@ -119,6 +122,3 @@ A_ASSOCIATE_Diag_ProtocolVersionNotSupported = A_ASSOCIATE_Diag(2, A_ASSOCIATE_R
 
 A_ASSOCIATE_Diag_TemporaryCongestion = A_ASSOCIATE_Diag(1, A_ASSOCIATE_ResultSource_ServiceProviderPresentation)
 A_ASSOCIATE_Diag_LocalLimitExceeded = A_ASSOCIATE_Diag(2, A_ASSOCIATE_ResultSource_ServiceProviderPresentation)
-
-
-

@@ -11,7 +11,7 @@ import ACSEprovider
 import time
 import logging
 
-logger = logging.getLogger('netdicom.SOPclass')
+logger = logging.getLogger(__name__)
 
 
 class Status(object):
@@ -311,6 +311,53 @@ class QueryRetrieveGetSOPClass(QueryRetrieveServiceClass):
         'Sub-operations are continuing',
         xrange(0xFF00, 0xFF00 + 1)
     )
+    CannotUnderstand = Status(
+        'Failure',
+        'Error: Cannot understand',
+        xrange(0xC000, 0xCFFF + 1)
+    )
+
+    def SCP(self, msg):
+        ds = dsutils.decode(msg.Identifier, self.transfersyntax.is_implicit_VR,
+                            self.transfersyntax.is_little_endian)
+
+        # make response
+        rsp = C_GET_ServiceParameters()
+        rsp.MessageIDBeingRespondedTo = msg.MessageID.value
+        rsp.AffectedSOPClassUID = msg.AffectedSOPClassUID.value
+        rsp.Status = int(self.Pending)
+
+        rsp.NumberOfRemainingSubOperations = 0
+        rsp.NumberOfCompletedSubOperations = 0
+        rsp.NumberOfFailedSubOperations = 0
+        rsp.NumberOfWarningSubOperations = 0
+
+        self.DIMSE.Send(rsp, self.pcid, self.maxpdulength)
+
+        gen = self.AE.OnReceiveGet(self, ds)
+        # # build C-STORE primitive
+        csto = C_STORE_ServiceParameters()
+        csto.MessageID = 0
+        for ds in gen:
+            csto.AffectedSOPClassUID = ds.SOPClassUID
+            csto.AffectedSOPInstanceUID = ds.SOPInstanceUID
+            csto.Priority = 0x0002
+            csto.DataSet = dsutils.encode(ds,
+                                          self.transfersyntax.is_implicit_VR,
+                                          self.transfersyntax.is_little_endian)
+            # send cstore request
+            self.DIMSE.Send(csto, self.pcid, self.maxpdulength)
+
+            # wait for c-store response
+            ans, id = self.DIMSE.Receive(Wait=True)
+            # TODO: Handle the answers coming back
+            if self.Code2Status(ans.Status.value).Type != 'Success':
+                pass
+
+        # TODO: Set various values on the rsp here
+        rsp.Status = int(self.Success)
+        self.DIMSE.Send(rsp, self.pcid, self.maxpdulength)
+
 
     def SCU(self, ds, msgid):
         # build C-GET primitive
@@ -341,17 +388,17 @@ class QueryRetrieveGetSOPClass(QueryRetrieveServiceClass):
                 rsp.MessageIDBeingRespondedTo = msg.MessageID
                 rsp.AffectedSOPInstanceUID = msg.AffectedSOPInstanceUID
                 rsp.AffectedSOPClassUID = msg.AffectedSOPClassUID
-                status = None
+
                 try:
                     d = dsutils.decode(
                         msg.DataSet, self.transfersyntax.is_implicit_VR,
                         self.transfersyntax.is_little_endian)
+                    SOPClass = UID2SOPClass(d.SOPClassUID)
+                    status = self.AE.OnReceiveStore(SOPClass, d)
                 except:
                     # cannot understand
-                    status = CannotUnderstand
+                    status = self.CannotUnderstand
 
-                SOPClass = UID2SOPClass(d.SOPClassUID)
-                status = self.AE.OnReceiveStore(SOPClass, d)
                 rsp.Status = int(status)
 
                 self.DIMSE.Send(rsp, id, self.maxpdulength)
@@ -534,7 +581,7 @@ class ModalityWorklistServiceSOPClass (BasicWorklistServiceClass):
         xrange(0xFF01, 0xFF01 + 1)
     )
 
-    def SCU(self, id):
+    def SCU(self, ds, msgid):
         # build C-FIND primitive
         cfind = C_FIND_ServiceParameters()
         cfind.MessageID = msgid
@@ -600,6 +647,7 @@ class VerificationSOPClass(VerificationServiceClass):
 
 
 # STORAGE SOP CLASSES
+# Slowly adding everything from http://www.dicomlibrary.com/dicom/sop/
 class StorageSOPClass(StorageServiceClass):
     pass
 
@@ -641,10 +689,10 @@ class DigitalIntraOralXRayImageProcessingStorageSOPClass(StorageSOPClass):
 
 class EncapsulatedPDFStorageSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.104.1'
-    
+
 class GrayscaleSoftcopyPresentationStateStorageSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.11.1'
-    
+
 class ColorSoftcopyPresentationStateStorageSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.11.2'
 
@@ -705,6 +753,30 @@ class RTPlanStorageSOPClass(StorageSOPClass):
 class VLEndoscopicImageStorageSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.77.1.1'
 
+class SpatialRegistrationSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.66.1'
+
+class EnhancedSRSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.88.22'
+
+class DigitalXRayImageStorageForPresentationSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.1.1'
+
+class DigitalXRayImageStorageForProcessingSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.1.1.1'
+
+class DigitalMammographyXRayImageStorageForPresentationSOPClass(StorageSOPClass):  # noqa
+    UID = '1.2.840.10008.5.1.4.1.1.1.2'
+
+class DigitalMammographyXRayImageStorageForProcessingSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.1.2.1'
+
+class DigitalIntraOralXRayImageStorageForPresentationSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.1.3'
+
+class DigitalIntraOralXRayImageStorageForProcessingSOPClass(StorageSOPClass):
+    UID = '1.2.840.10008.5.1.4.1.1.1.3.1'
+
 class VideoEndoscopicImageStorageSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.77.1.1.1'
 
@@ -758,7 +830,6 @@ class XRayRadiationDoseStructuredReportSOPClass(StorageSOPClass):
 
 class EnhancedStructuredReportSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.88.22'
-
 
 
 # QUERY RETRIEVE SOP Classes

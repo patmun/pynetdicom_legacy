@@ -5,6 +5,42 @@ __version_info__ = __version__.split('.')
 
 # some imports
 from applicationentity import AE
+from SOPclass import \
+    VerificationSOPClass,\
+    StorageSOPClass,\
+    MRImageStorageSOPClass,\
+    CTImageStorageSOPClass,\
+    PositronEmissionTomographyImageStorageSOPClass,\
+    CRImageStorageSOPClass,\
+    SCImageStorageSOPClass,\
+    RTImageStorageSOPClass,\
+    RTDoseStorageSOPClass,\
+    RTStructureSetStorageSOPClass,\
+    RTPlanStorageSOPClass,\
+    EnhancedSRSOPClass,\
+    XRayRadiationDoseStructuredReportSOPClass,\
+    DigitalXRayImageStorageForPresentationSOPClass,\
+    DigitalXRayImageStorageForProcessingSOPClass,\
+    DigitalMammographyXRayImageStorageForPresentationSOPClass,\
+    DigitalMammographyXRayImageStorageForProcessingSOPClass,\
+    DigitalIntraOralXRayImageStorageForPresentationSOPClass,\
+    DigitalIntraOralXRayImageStorageForProcessingSOPClass,\
+    XRayAngiographicImageStorageSOPClass,\
+    EnhancedXAImageStorageSOPClass,\
+    XRayRadiofluoroscopicImageStorageSOPClass,\
+    EnhancedXRFImageStorageSOPClass,\
+    EnhancedCTImageStorageSOPClass,\
+    NMImageStorageSOPClass,\
+    PatientRootFindSOPClass,\
+    PatientRootMoveSOPClass,\
+    PatientRootGetSOPClass,\
+    StudyRootFindSOPClass,\
+    StudyRootMoveSOPClass,\
+    StudyRootGetSOPClass,\
+    PatientStudyOnlyFindSOPClass,\
+    PatientStudyOnlyMoveSOPClass,\
+    PatientStudyOnlyGetSOPClass,\
+    ModalityWorklistInformationFindSOPClass
 
 # UID prefix provided by https://www.medicalconnections.co.uk/Free_UID
 pynetdicom_uid_prefix = '1.2.826.0.1.3680043.9.3811.'
@@ -19,7 +55,7 @@ import logging
 # pynetdicom defines a logger with a NullHandler only.
 # Client code have the responsability to configure
 # this logger.
-logger = logging.getLogger('netdicom')
+logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 # helper functions to configure the logger. This should be
@@ -27,17 +63,17 @@ logger.addHandler(logging.NullHandler())
 
 
 def logger_setup():
-    logger = logging.getLogger('netdicom')
+    logger = logging.getLogger(__name__)
     handler = logging.StreamHandler()
     logger.setLevel(logging.WARNING)
     formatter = logging.Formatter("%(name)s %(message)s")
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     # logging.getLogger('netdicom.FSM').setLevel(logging.CRITICAL)
-    logging.getLogger('netdicom.DUL').setLevel(logging.CRITICAL)
-
+    logging.getLogger('netdicom.DULprovider').setLevel(logging.CRITICAL)
+    logging.getLogger('netdicom.timer').setLevel(logging.CRITICAL)
 
 def debug(debug_on=True):
     """Turn debugging of DICOM network operations on or off."""
-    logger = logging.getLogger('netdicom')
+    logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)

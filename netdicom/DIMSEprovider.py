@@ -12,7 +12,7 @@ from DULparameters import P_DATA_ServiceParameters
 import time
 
 import logging
-logger = logging.getLogger('netdicom.DIMSE')
+logger = logging.getLogger(__name__)
 
 
 class DIMSEServiceProvider(object):

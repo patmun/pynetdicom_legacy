@@ -25,7 +25,9 @@ from PDU import *
 import DULparameters
 import Queue
 import logging
-logger = logging.getLogger('netdicom.DUL')
+
+
+logger = logging.getLogger(__name__)
 
 
 class InvalidPrimitive(Exception):
@@ -48,7 +50,7 @@ def recvn(sock, n):
 
 class DULServiceProvider(Thread):
 
-    def __init__(self, Socket=None, Port=None, Name='', MaxIdleSeconds=None):
+    def __init__(self, Socket=None, Port=None, Name='', MaxIdleSeconds=None, ConnectTimeoutSeconds=None):
         """Three ways to call DULServiceProvider. If a port number is given,
         the DUL will wait for incoming connections on this port. If a socket
         is given, the DUL will use this socket as the client socket. If none
@@ -77,6 +79,7 @@ class DULServiceProvider(Thread):
         self._idle_timer = None
         if MaxIdleSeconds is not None and MaxIdleSeconds > 0:
             self._idle_timer = timer.Timer(MaxIdleSeconds)
+        self.ConnectTimeoutSeconds = ConnectTimeoutSeconds
         self.Timer = timer.Timer(10)
         self.SM = fsm.StateMachine(self)
 
@@ -198,7 +201,7 @@ class DULServiceProvider(Thread):
 
     def idle_timer_expired(self):
         """
-        Checks if the idle timer has expired and returns True if has, False 
+        Checks if the idle timer has expired and returns True if has, False
         otherwise
         """
         if self._idle_timer is None:
@@ -269,8 +272,9 @@ class DULServiceProvider(Thread):
             #logger.debug('%s: starting DUL loop' % self.name)
             if self.kill:
                 break
-            # catch an event
+
             try:
+                # catch an event
                 if self.CheckNetwork():
                     if self._idle_timer is not None:
                         self._idle_timer.Restart()
@@ -279,8 +283,11 @@ class DULServiceProvider(Thread):
                 elif self.CheckTimer():
                     self.kill = True
             except:
+                # We mark the Thread as kill here
+                # Deal with: https://code.google.com/p/pynetdicom/issues/detail?id=17
                 self.kill = True
                 raise
+
             try:
                 evt = self.event.get(False)
             except Queue.Empty:
@@ -289,7 +296,10 @@ class DULServiceProvider(Thread):
             try:
                 self.SM.Action(evt, self)
             except:
+                # We mark the Thread as kill here
+                # Deal with: https://code.google.com/p/pynetdicom/issues/detail?id=14
                 self.kill = True
+                raise
         logger.debug('%s: DUL loop ended' % self.name)
 
 

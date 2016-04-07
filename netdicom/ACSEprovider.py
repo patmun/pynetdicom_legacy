@@ -14,7 +14,7 @@ import socket
 import time
 
 import logging
-logger = logging.getLogger('netdicom.ACSE')
+logger = logging.getLogger(__name__)
 
 
 class AssociationRefused(Exception):

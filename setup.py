@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# pip workaround (see: https://github.com/pypa/pip/issues/1979)
+import os
+os.chdir(os.path.abspath(os.path.dirname(__file__)))
+
 from distribute_setup import use_setuptools
 use_setuptools()
 
@@ -37,5 +41,8 @@ setup(name="pynetdicom",
         "Topic :: Software Development :: Libraries",
         ],
       long_description = open('README.txt').read(),
-      install_requires=["pydicom >= 0.9.7"]
+      install_requires=["pydicom >= 1.0.0"],
+      dependency_links=[
+       "git+https://github.com/darcymason/pydicom.git#egg=pydicom-1.0.0"
+      ]
      )

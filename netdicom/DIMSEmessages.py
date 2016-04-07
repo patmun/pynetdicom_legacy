@@ -19,7 +19,7 @@ import itertools
 
 import logging
 
-logger = logging.getLogger('netdicom.DIMSE')
+logger = logging.getLogger(__name__)
 
 
 DicomDictionary.update({
@@ -42,10 +42,10 @@ DicomDictionary.update({
     0x00001002: ('US', '1', "EventTypeID", ''),
     0x00001005: ('AT', '1', "AttributeIdentifierList", ''),
     0x00001008: ('US', '1', "ActionTypeID", ''),
-    0x00001020: ('US', '1', "NumberOfRemainingSuboperations", ''),
-    0x00001021: ('US', '1', "NumberOfCompletedSuboperations", ''),
-    0x00001022: ('US', '1', "NumberOfFailedSuboperations", ''),
-    0x00001023: ('US', '1', "NumberOfWarningSuboperations", ''),
+    0x00001020: ('US', '1', "NumberOfRemainingSubOperations", ''),
+    0x00001021: ('US', '1', "NumberOfCompletedSubOperations", ''),
+    0x00001022: ('US', '1', "NumberOfFailedSubOperations", ''),
+    0x00001023: ('US', '1', "NumberOfWarningSubOperations", ''),
     0x00001030: ('AE', '1', "MoveOriginatorApplicationEntityTitle", ''),
     0x00001031: ('US', '1', "MoveOriginatorMessageID", ''),
 
@@ -464,9 +464,9 @@ class C_GET_RQ_Message(DIMSEMessage):
 
     def ToParams(self):
         tmp = C_GET_ServiceParameters()
-        tmp.MessageID = self.CommandSet[(0x0000, 0x0110)].value
-        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)].value
-        tmp.Priority = self.CommandSet[(0x0000, 0x0700)].value
+        tmp.MessageID = self.CommandSet[(0x0000, 0x0110)]
+        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)]
+        tmp.Priority = self.CommandSet[(0x0000, 0x0700)]
         tmp.Identifier = self.DataSet
         return tmp
 

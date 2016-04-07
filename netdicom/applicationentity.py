@@ -26,11 +26,11 @@ import struct
 import timer
 
 import logging
-logger = logging.getLogger('netdicom.applicationentity')
+logger = logging.getLogger(__name__)
 
 class Association(threading.Thread):
 
-    def __init__(self, LocalAE, ClientSocket=None, RemoteAE=None):
+    def __init__(self, LocalAE, ClientSocket=None, RemoteAE=None, AssociateRequestTimeout=30):
         if not ClientSocket and not RemoteAE:
             raise
         if ClientSocket and RemoteAE:
@@ -44,7 +44,8 @@ class Association(threading.Thread):
         self.ClientSocket = ClientSocket
         self.AE = LocalAE
         self.DUL = DULServiceProvider(ClientSocket,
-                                      MaxIdleSeconds=self.AE.MaxAssociationIdleSeconds)
+                                      MaxIdleSeconds=self.AE.MaxAssociationIdleSeconds,
+                                      ConnectTimeoutSeconds=self.AE.ConnectTimeoutSeconds)
         self.RemoteAE = RemoteAE
         self._Kill = False
         threading.Thread.__init__(self)
@@ -53,6 +54,7 @@ class Association(threading.Thread):
         self.SOPClassesAsSCU = []
         self.AssociationEstablished = False
         self.AssociationRefused = None
+        self.AssociateRequestTimeout = AssociateRequestTimeout
         self.start()
 
     def GetSOPClass(self, ds):
@@ -75,13 +77,17 @@ class Association(threading.Thread):
     def __getattr__(self, attr):
         # while not self.AssociationEstablished:
         #    time.sleep(0.001)
-        obj = eval(attr)()
+        try:
+           obj = eval(attr)()
+        except NameError:
+           raise AttributeError
+
         try:
             obj.pcid, obj.sopclass, obj.transfersyntax = \
                 [x for x in self.SOPClassesAsSCU if
                  x[1] == obj.__class__][0]
         except IndexError:
-            raise "SOP Class %s not supported as SCU" % attr
+            raise Exception("SOP Class %s not supported as SCU" % attr)
 
         obj.maxpdulength = self.ACSE.MaxPDULength
         obj.DIMSE = self.DIMSE
@@ -145,11 +151,12 @@ class Association(threading.Thread):
             ans = self.ACSE.Request(self.AE.LocalAE, self.RemoteAE,
                                     self.AE.MaxPDULength,
                                     self.AE.PresentationContextDefinitionList,
-                                    userspdu=ext)
+                                    userspdu=ext,
+                                    timeout=self.AssociateRequestTimeout)
             if ans:
                 # call back
-                if 'OnAssociateResponse' in self.AE.__dict__:
-                    self.AE.OnAssociateResponse(ans)
+                if hasattr(self.AE, 'OnAssociateResponse'):
+                    self.AE.OnAssociateResponse(self)
             else:
                 self.AssociationRefused = True
                 self.DUL.Kill()
@@ -203,9 +210,9 @@ class Association(threading.Thread):
                 # check if idle timer has expired
                 logger.debug("checking DUL idle timer")
                 if self.DUL.idle_timer_expired():
-                    logger.warning('%s: DUL provider idle timer expired' % (self.name))  
+                    logger.warning('%s: DUL provider idle timer expired' % (self.name))
                     self.Kill()
- 
+
 
 
 
@@ -235,6 +242,8 @@ class AE(threading.Thread):
         # maximum amount of time this association can be idle before it gets
         # terminated
         self.MaxAssociationIdleSeconds = None
+        self.ConnectTimeoutSeconds = None
+        self.AssociateRequestTimeout = 30
         threading.Thread.__init__(self, name=self.LocalAE['AET'])
         self.daemon = True
         self.SOPUID = [x for x in self.SupportedSOPClassesAsSCP]
@@ -324,8 +333,8 @@ class AE(threading.Thread):
     def Quit(self):
         for aa in self.Associations:
             aa.Kill()
-            if self.LocalServerSocket:
-                self.LocalServerSocket.close()
+        if self.LocalServerSocket:
+            self.LocalServerSocket.close()
         self.__Quit = True
 
     def QuitOnKeyboardInterrupt(self):
@@ -345,7 +354,8 @@ class AE(threading.Thread):
 
     def RequestAssociation(self, remoteAE):
         """Requests association to a remote application entity"""
-        assoc = Association(self, RemoteAE=remoteAE)
+        assoc = Association(self, RemoteAE=remoteAE, AssociateRequestTimeout=self.AssociateRequestTimeout)
+
         while not assoc.AssociationEstablished \
                 and not assoc.AssociationRefused and not assoc.DUL.kill:
             time.sleep(0.1)
@@ -353,4 +363,6 @@ class AE(threading.Thread):
             self.Associations.append(assoc)
             return assoc
         else:
+            logger.debug("RequestAssociation: AssociationRefused=%s; DUL.kill=%s" % (assoc.AssociationRefused,
+                                                                                     assoc.DUL.kill))
             return None

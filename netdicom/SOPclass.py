@@ -376,12 +376,8 @@ class QueryRetrieveGetSOPClass(QueryRetrieveServiceClass):
             # receive c-store
             msg, id = self.DIMSE.Receive(Wait=True)
             if msg.__class__ == C_GET_ServiceParameters:
-                if self.Code2Status(msg.Status.value).Type == 'Pending':
-                    # pending. intermediate C-GET response
-                    pass
-                else:
-                    # last answer
-                    break
+                status = self.Code2Status(msg.Status.value).Type
+                yield status,msg
             elif msg.__class__ == C_STORE_ServiceParameters:
                 # send c-store response
                 rsp = C_STORE_ServiceParameters()
@@ -474,9 +470,8 @@ class QueryRetrieveMoveSOPClass(QueryRetrieveServiceClass):
             if not ans:
                 continue
             status = self.Code2Status(ans.Status.value).Type
-            if status != 'Pending':
-                break
-            yield status
+
+            yield status,ans
 
     def SCP(self, msg):
         ds = dsutils.decode(msg.Identifier, self.transfersyntax.is_implicit_VR,

@@ -10,7 +10,8 @@ import DIMSEparameters
 from DIMSEmessages import DIMSEMessage
 from DULparameters import P_DATA_ServiceParameters
 import time
-
+try: from queue import Empty
+except ImportError: from Queue import Empty
 import logging
 logger = logging.getLogger(__name__)
 
@@ -59,18 +60,29 @@ class DIMSEServiceProvider(object):
             self.DUL.Send(pp)
         logger.debug('DIMSE message sent')
 
-    def Receive(self, Wait=False, Timeout=None):
+    def Receive(self, Wait=False, Timeout=120):
         logger.debug("In DIMSEprovider.Receive")
         if self.message is None:
             self.message = DIMSEMessage()
         if Wait:
             # loop until complete DIMSE message is received
             logger.debug('Entering loop for receiving DIMSE message')
+
+            # If connection fails, the peek loop can iterate forever, as the
+            # DUL Receive never happens. Approximate a timeout to abort
+            itrs = 0
+            delay = 0.001
             while 1:
-                time.sleep(0.001)
+                time.sleep(delay)
                 nxt = self.DUL.Peek()
                 if nxt is None:
-                    continue
+                    itrs +=1
+                    if Timeout and itrs > Timeout/float(delay):
+                        # just like the DUL.Receive would on timeout
+                        raise Empty('Timeout waiting for DIMSE message')
+                    else:
+                        continue
+
                 if nxt.__class__ is not P_DATA_ServiceParameters:
                     return None, None
                 if self.message.Decode(self.DUL.Receive(Wait, Timeout)):

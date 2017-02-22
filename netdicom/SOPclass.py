@@ -394,6 +394,7 @@ class QueryRetrieveGetSOPClass(QueryRetrieveServiceClass):
                         msg.DataSet, self.transfersyntax.is_implicit_VR,
                         self.transfersyntax.is_little_endian)
                     SOPClass = UID2SOPClass(d.SOPClassUID)
+                    SOPClass.transfersyntax = self.transfersyntax
                     status = self.AE.OnReceiveStore(SOPClass, d)
                 except:
                     # cannot understand

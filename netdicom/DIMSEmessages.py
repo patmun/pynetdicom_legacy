@@ -228,8 +228,8 @@ class C_ECHO_RQ_Message(DIMSEMessage):
 
     def ToParams(self):
         tmp = C_ECHO_ServiceParameters()
-        tmp.MessageID = self.CommandSet[(0x0000, 0x0110)]
-        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)]
+        tmp.MessageID = self.CommandSet.get((0x0000, 0x0110))
+        tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
         return tmp
 
 
@@ -262,8 +262,8 @@ class C_ECHO_RSP_Message(DIMSEMessage):
 
     def ToParams(self):
         tmp = C_ECHO_ServiceParameters()
-        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)]
-        tmp.MessageIDBeingRespondedTo = self.CommandSet[(0x0000, 0x0120)]
+        tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
+        tmp.MessageIDBeingRespondedTo = self.CommandSet.get((0x0000, 0x0120))
         tmp.Status = 0
         return tmp
 
@@ -313,11 +313,11 @@ class C_STORE_RQ_Message(DIMSEMessage):
 
     def ToParams(self):
         tmp = C_STORE_ServiceParameters()
-        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)]
-        tmp.AffectedSOPInstanceUID = self.CommandSet[(0x0000, 0x1000)]
-        tmp.Priority = self.CommandSet[(0x0000, 0x0700)]
+        tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
+        tmp.AffectedSOPInstanceUID = self.CommandSet.get((0x0000, 0x1000))
+        tmp.Priority = self.CommandSet.get((0x0000, 0x0700))
         tmp.DataSet = self.DataSet
-        tmp.MessageID = self.CommandSet[(0x0000, 0x0110)]
+        tmp.MessageID = self.CommandSet.get((0x0000, 0x0110))
         return tmp
 
 
@@ -353,10 +353,10 @@ class C_STORE_RSP_Message(DIMSEMessage):
 
     def ToParams(self):
         tmp = C_STORE_ServiceParameters()
-        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)]
-        tmp.MessageIDBeingRespondedTo = self.CommandSet[(0x0000, 0x0120)]
-        tmp.Status = self.CommandSet[(0x0000, 0x0900)]
-        tmp.AffectedSOPInstanceUID = self.CommandSet[(0x0000, 0x1000)]
+        tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
+        tmp.MessageIDBeingRespondedTo = self.CommandSet.get((0x0000, 0x0120))
+        tmp.Status = self.CommandSet.get((0x0000, 0x0900))
+        tmp.AffectedSOPInstanceUID = self.CommandSet.get((0x0000, 0x1000))
         tmp.DataSet = self.DataSet
         return tmp
 
@@ -389,10 +389,10 @@ class C_FIND_RQ_Message(DIMSEMessage):
 
     def ToParams(self):
         tmp = C_FIND_ServiceParameters()
-        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)]
-        tmp.Priority = self.CommandSet[(0x0000, 0x0700)]
+        tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
+        tmp.Priority = self.CommandSet.get((0x0000, 0x0700))
         tmp.Identifier = self.DataSet
-        tmp.MessageID = self.CommandSet[(0x0000, 0x0110)]
+        tmp.MessageID = self.CommandSet.get((0x0000, 0x0110))
         return tmp
 
 
@@ -429,9 +429,9 @@ class C_FIND_RSP_Message(DIMSEMessage):
 
     def ToParams(self):
         tmp = C_FIND_ServiceParameters()
-        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)]
-        tmp.MessageIDBeingRespondedTo = self.CommandSet[(0x0000, 0x0120)]
-        tmp.Status = self.CommandSet[(0x0000, 0x0900)]
+        tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
+        tmp.MessageIDBeingRespondedTo = self.CommandSet.get((0x0000, 0x0120))
+        tmp.Status = self.CommandSet.get((0x0000, 0x0900))
         tmp.Identifier = self.DataSet
         return tmp
 
@@ -464,9 +464,9 @@ class C_GET_RQ_Message(DIMSEMessage):
 
     def ToParams(self):
         tmp = C_GET_ServiceParameters()
-        tmp.MessageID = self.CommandSet[(0x0000, 0x0110)]
-        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)]
-        tmp.Priority = self.CommandSet[(0x0000, 0x0700)]
+        tmp.MessageID = self.CommandSet.get((0x0000, 0x0110))
+        tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
+        tmp.Priority = self.CommandSet.get((0x0000, 0x0700))
         tmp.Identifier = self.DataSet
         return tmp
 
@@ -515,17 +515,13 @@ class C_GET_RSP_Message(DIMSEMessage):
 
     def ToParams(self):
         tmp = C_GET_ServiceParameters()
-        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)]
-        tmp.MessageIDBeingRespondedTo = self.CommandSet[(0x0000, 0x0120)]
-        tmp.Status = self.CommandSet[(0x0000, 0x0900)]
-        try:
-            tmp.NumberOfRemainingSubOperations = self.CommandSet[
-                (0x0000, 0x1020)]
-        except:
-            pass
-        tmp.NumberOfCompletedSubOperations = self.CommandSet[(0x0000, 0x1021)]
-        tmp.NumberOfFailedSubOperations = self.CommandSet[(0x0000, 0x1022)]
-        tmp.NumberOfWarningSubOperations = self.CommandSet[(0x0000, 0x1023)]
+        tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
+        tmp.MessageIDBeingRespondedTo = self.CommandSet.get((0x0000, 0x0120))
+        tmp.Status = self.CommandSet.get((0x0000, 0x0900))
+        tmp.NumberOfRemainingSubOperations = self.CommandSet.get( (0x0000, 0x1020))
+        tmp.NumberOfCompletedSubOperations = self.CommandSet.get((0x0000, 0x1021))
+        tmp.NumberOfFailedSubOperations = self.CommandSet.get((0x0000, 0x1022))
+        tmp.NumberOfWarningSubOperations = self.CommandSet.get((0x0000, 0x1023))
         tmp.Identifier = self.DataSet
         return tmp
 
@@ -562,10 +558,10 @@ class C_MOVE_RQ_Message(DIMSEMessage):
 
     def ToParams(self):
         tmp = C_MOVE_ServiceParameters()
-        tmp.MessageID = self.CommandSet[(0x0000, 0x0110)]
-        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)]
-        tmp.Priority = self.CommandSet[(0x0000, 0x0700)]
-        tmp.MoveDestination = self.CommandSet[(0x0000, 0x0600)]
+        tmp.MessageID = self.CommandSet.get((0x0000, 0x0110))
+        tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
+        tmp.Priority = self.CommandSet.get((0x0000, 0x0700))
+        tmp.MoveDestination = self.CommandSet.get((0x0000, 0x0600))
         tmp.Identifier = self.DataSet
         return tmp
 
@@ -614,17 +610,13 @@ class C_MOVE_RSP_Message(DIMSEMessage):
 
     def ToParams(self):
         tmp = C_MOVE_ServiceParameters()
-        tmp.AffectedSOPClassUID = self.CommandSet[(0x0000, 0x0002)]
-        tmp.MessageIDBeingRespondedTo = self.CommandSet[(0x0000, 0x0120)]
-        tmp.Status = self.CommandSet[(0x0000, 0x0900)]
-        try:
-            tmp.NumberOfRemainingSubOperations = self.CommandSet[
-                (0x0000, 0x1020)]
-        except:
-            pass
-        tmp.NumberOfCompletedSubOperations = self.CommandSet[(0x0000, 0x1021)]
-        tmp.NumberOfFailedSubOperations = self.CommandSet[(0x0000, 0x1022)]
-        tmp.NumberOfWarningSubOperations = self.CommandSet[(0x0000, 0x1023)]
+        tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
+        tmp.MessageIDBeingRespondedTo = self.CommandSet.get((0x0000, 0x0120))
+        tmp.Status = self.CommandSet.get((0x0000, 0x0900))
+        tmp.NumberOfRemainingSubOperations = self.CommandSet.get((0x0000, 0x1020))
+        tmp.NumberOfCompletedSubOperations = self.CommandSet.get((0x0000, 0x1021))
+        tmp.NumberOfFailedSubOperations = self.CommandSet.get((0x0000, 0x1022))
+        tmp.NumberOfWarningSubOperations = self.CommandSet.get((0x0000, 0x1023))
         tmp.Identifier = self.DataSet
         return tmp
 
@@ -654,7 +646,7 @@ class C_CANCEL_FIND_RQ_Message(C_CANCEL_RQ_Message):
 
     def ToParams(self):
         tmp = C_Find_ServiceParameters()
-        tmp.MessageIDBeingRespondedTo = self.CommandSet[(0x0000, 0x0120)]
+        tmp.MessageIDBeingRespondedTo = self.CommandSet.get((0x0000, 0x0120))
         return tmp
 
 
@@ -662,7 +654,7 @@ class C_CANCEL_GET_RQ_Message(C_CANCEL_RQ_Message):
 
     def ToParams(self):
         tmp = C_Get_ServiceParameters()
-        tmp.MessageIDBeingRespondedTo = self.CommandSet[(0x0000, 0x0120)]
+        tmp.MessageIDBeingRespondedTo = self.CommandSet.get((0x0000, 0x0120))
         return tmp
 
 
@@ -670,7 +662,7 @@ class C_CANCEL_MOVE_RQ_Message(C_CANCEL_RQ_Message):
 
     def ToParams(self):
         tmp = C_Move_ServiceParameters()
-        tmp.MessageIDBeingRespondedTo = self.CommandSet[(0x0000, 0x0120)]
+        tmp.MessageIDBeingRespondedTo = self.CommandSet.get((0x0000, 0x0120))
         return tmp
 
 

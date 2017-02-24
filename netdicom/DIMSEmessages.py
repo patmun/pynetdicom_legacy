@@ -335,7 +335,9 @@ class C_STORE_RSP_Message(DIMSEMessage):
          (0x0000, 0x0800), 'US', 1),
         ('Status',
          (0x0000, 0x0900), 'US', 1),
-        ('Affected SOP Instance UID',                (0x0000, 0x1000), 'UI', 1)
+        ('Affected SOP Instance UID',                (0x0000, 0x1000), 'UI', 1),
+        ('Error Comment',
+         (0x0000, 0x0902), 'LO', 1),
     ]
 
     def FromParams(self, params):
@@ -356,6 +358,7 @@ class C_STORE_RSP_Message(DIMSEMessage):
         tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
         tmp.MessageIDBeingRespondedTo = self.CommandSet.get((0x0000, 0x0120))
         tmp.Status = self.CommandSet.get((0x0000, 0x0900))
+        tmp.ErrorComment = self.CommandSet.get((0x0000, 0x0902))
         tmp.AffectedSOPInstanceUID = self.CommandSet.get((0x0000, 0x1000))
         tmp.DataSet = self.DataSet
         return tmp
@@ -410,6 +413,8 @@ class C_FIND_RSP_Message(DIMSEMessage):
          (0x0000, 0x0800), 'US', 1),
         ('Status',
          (0x0000, 0x0900), 'US', 1),
+        ('Error Comment',
+         (0x0000, 0x0902), 'LO', 1),
     ]
     DataField = 'Identifier'
 
@@ -432,6 +437,7 @@ class C_FIND_RSP_Message(DIMSEMessage):
         tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
         tmp.MessageIDBeingRespondedTo = self.CommandSet.get((0x0000, 0x0120))
         tmp.Status = self.CommandSet.get((0x0000, 0x0900))
+        tmp.ErrorComment = self.CommandSet.get((0x0000, 0x0902))
         tmp.Identifier = self.DataSet
         return tmp
 
@@ -492,7 +498,8 @@ class C_GET_RSP_Message(DIMSEMessage):
         ('Number of Failed Sub-operations',      (0x0000, 0x1022), 'US', 1),
         ('Number of Warning Sub-operations',
          (0x0000, 0x1023), 'US', 1),
-
+        ('Error Comment',
+         (0x0000, 0x0902), 'LO', 1),
     ]
     DataField = 'Identifier'
 
@@ -518,6 +525,7 @@ class C_GET_RSP_Message(DIMSEMessage):
         tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
         tmp.MessageIDBeingRespondedTo = self.CommandSet.get((0x0000, 0x0120))
         tmp.Status = self.CommandSet.get((0x0000, 0x0900))
+        tmp.ErrorComment = self.CommandSet.get((0x0000, 0x0902))
         tmp.NumberOfRemainingSubOperations = self.CommandSet.get( (0x0000, 0x1020))
         tmp.NumberOfCompletedSubOperations = self.CommandSet.get((0x0000, 0x1021))
         tmp.NumberOfFailedSubOperations = self.CommandSet.get((0x0000, 0x1022))
@@ -587,7 +595,8 @@ class C_MOVE_RSP_Message(DIMSEMessage):
         ('Number of Failed Sub-operations',      (0x0000, 0x1022), 'US', 1),
         ('Number of Warning Sub-operations',
          (0x0000, 0x1023), 'US', 1),
-
+        ('Error Comment',
+         (0x0000, 0x0902), 'LO', 1),
     ]
     DataField = 'Identifier'
 
@@ -598,6 +607,7 @@ class C_MOVE_RSP_Message(DIMSEMessage):
                         ].value = params.MessageIDBeingRespondedTo
         self.CommandSet[(0x0000, 0x0800)].value = 0x0101
         self.CommandSet[(0x0000, 0x0900)].value = params.Status
+        #self.CommandSet[(0x0000, 0x0902)].value = params.ErrorComment -- TODO?
         self.CommandSet[(0x0000, 0x1020)
                         ].value = params.NumberOfRemainingSubOperations
         self.CommandSet[(0x0000, 0x1021)
@@ -613,6 +623,7 @@ class C_MOVE_RSP_Message(DIMSEMessage):
         tmp.AffectedSOPClassUID = self.CommandSet.get((0x0000, 0x0002))
         tmp.MessageIDBeingRespondedTo = self.CommandSet.get((0x0000, 0x0120))
         tmp.Status = self.CommandSet.get((0x0000, 0x0900))
+        tmp.ErrorComment = self.CommandSet.get((0x0000, 0x0902))
         tmp.NumberOfRemainingSubOperations = self.CommandSet.get((0x0000, 0x1020))
         tmp.NumberOfCompletedSubOperations = self.CommandSet.get((0x0000, 0x1021))
         tmp.NumberOfFailedSubOperations = self.CommandSet.get((0x0000, 0x1022))

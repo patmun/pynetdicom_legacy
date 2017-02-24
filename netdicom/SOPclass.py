@@ -229,10 +229,10 @@ class QueryRetrieveFindSOPClass(QueryRetrieveServiceClass):
                 ans.Identifier, self.transfersyntax.is_implicit_VR,
                 self.transfersyntax.is_little_endian)
             try:
-                status = self.Code2Status(ans.Status.value).Type
+                status = self.Code2Status(ans.Status.value)
             except:
                 status = None
-            if status != 'Pending':
+            if status and status.Type != 'Pending':
                 break
             yield status, d
         yield status, d
@@ -376,12 +376,13 @@ class QueryRetrieveGetSOPClass(QueryRetrieveServiceClass):
             # receive c-store
             msg, id = self.DIMSE.Receive(Wait=True)
             if msg.__class__ == C_GET_ServiceParameters:
-                if self.Code2Status(msg.Status.value).Type == 'Pending':
-                    # pending. intermediate C-GET response
-                    pass
-                else:
-                    # last answer
-                    break
+                status = self.Code2Status(msg.Status.value)
+
+                yield status,msg
+
+                if status.Type != 'Pending':
+                    break # last answer
+
             elif msg.__class__ == C_STORE_ServiceParameters:
                 # send c-store response
                 rsp = C_STORE_ServiceParameters()
@@ -474,10 +475,14 @@ class QueryRetrieveMoveSOPClass(QueryRetrieveServiceClass):
             ans, id = self.DIMSE.Receive(Wait=False)
             if not ans:
                 continue
-            status = self.Code2Status(ans.Status.value).Type
-            if status != 'Pending':
-                break
-            yield status
+
+            status = self.Code2Status(ans.Status.value)
+
+            yield status,ans
+
+            if status and status.Type != 'Pending':
+                break # last answer
+
 
     def SCP(self, msg):
         ds = dsutils.decode(msg.Identifier, self.transfersyntax.is_implicit_VR,
@@ -604,10 +609,10 @@ class ModalityWorklistServiceSOPClass (BasicWorklistServiceClass):
                 ans.Identifier, self.transfersyntax.is_implicit_VR,
                 self.transfersyntax.is_little_endian)
             try:
-                status = self.Code2Status(ans.Status.value).Type
+                status = self.Code2Status(ans.Status.value)
             except:
                 status = None
-            if status != 'Pending':
+            if status and status.Type != 'Pending':
                 break
             yield status, d
         yield status, d

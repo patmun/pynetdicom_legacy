@@ -244,6 +244,7 @@ class AE(threading.Thread):
         self.MaxAssociationIdleSeconds = None
         self.ConnectTimeoutSeconds = None
         self.AssociateRequestTimeout = 30
+        self.ClientSocketReceiveTimeout = 30
         threading.Thread.__init__(self, name=self.LocalAE['AET'])
         self.daemon = True
         self.SOPUID = [x for x in self.SupportedSOPClassesAsSCP]
@@ -314,7 +315,7 @@ class AE(threading.Thread):
             if a:
                 # got an incoming connection
                 client_socket, remote_address = self.LocalServerSocket.accept()
-                client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVTIMEO, struct.pack('ll',10,0))
+                client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVTIMEO, struct.pack('ll',self.ClientSocketReceiveTimeout,0))
                 # create a new association
                 self.Associations.append(Association(self, client_socket))
 

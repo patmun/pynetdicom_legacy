@@ -304,7 +304,7 @@ actions = {
     'AA-4': ('Issue A-P-ABORT indication primitive', AA_4, 'Sta1'),
     'AA-5': ('Stop ARTIM timer', AA_5, 'Sta1'),
     'AA-6': ('Ignore PDU', AA_6, 'Sta13'),
-    'AA-7': ('Send A-ABORT PDU', AA_6, 'Sta13'),
+    'AA-7': ('Send A-ABORT PDU', AA_7, 'Sta13'),
     'AA-8': ('Send A-ABORT PDU, issue an A-P-ABORT indication and start '
              'ARTIM timer', AA_8, 'Sta13')}
 

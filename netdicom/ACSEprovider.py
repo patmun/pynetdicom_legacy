@@ -173,7 +173,7 @@ class ACSEServiceProvider(object):
     def Abort(self):
         """Signifies the abortion of the association."""
         ab = A_ABORT_ServiceParameters()
-        self.DUL.Send(rel)
+        self.DUL.Send(ab)
         time.sleep(0.5)
         # self.DUL.Kill()
 

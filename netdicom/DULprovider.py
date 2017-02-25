@@ -35,17 +35,17 @@ class InvalidPrimitive(Exception):
 
 
 def recvn(sock, n):
-    ret = ''
+    ret = []
     read_length = 0
     while read_length < n:
         tmp = sock.recv(n - read_length)
         if len(tmp)==0:
             return ret
-        ret += tmp
+        ret.append(tmp)
         read_length += len(tmp)
     if read_length != n:
         raise "Low level Network ERROR: "
-    return ret
+    return ''.join(ret)
 
 
 class DULServiceProvider(Thread):

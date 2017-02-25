@@ -22,12 +22,12 @@ python package, it should run anywhere python runs.
 
 You can find examples in :ref:`here <usecases>`.
 
-pynetdicom is hosted `here <http://code.google.com/p/pynetdicom>`_.
+pynetdicom is hosted `here <https://github.com/patmun/pynetdicom>`_.
 
 License
 =======
 pynetdicom uses the `MIT license 
-<http://code.google.com/p/pynetdicom/source/browse/source/LICENCE.txt>`_.
+<https://github.com/patmun/pynetdicom/blob/master/LICENCE.txt>`_.
 
 Prerequisites
 =============
@@ -39,37 +39,35 @@ Installation
 ============
 Here are the installation options:
 
-  * pynetdicom is registered at PyPi_, so it can be installed with any
-    of the following:
+  * pynetdicom is registered at PyPi_, so it can be installed with pip_::
 
-    + `easy_install <http://peak.telecommunity.com/DevCenter/EasyInstall>`_
-    + pip_
+        pip install pynetdicom
 
-  * download `source package <http://pypi.python.org/pypi/pynetdicom>`_ 
-    and install with::
+  * download the `source package <https://pypi.python.org/pypi/pynetdicom>`_ ,
+    uncompress and install with::
 
         python setup.py install    
 
-  * A :rel:`windows installer <>` is also available.
+  * A `windows installer <https://pypi.python.org/packages/84/48/412cec48bfe71a6dc753806c1417690900efe06339ae6136e2769abd2277/pynetdicom-0.8.1.win32.exe#md5=1bb36733371614a9811506f935268ae1>`_ is also available.
 
-  * Finally you can clone the `source tree <http://code.google.com/p/pynetdicom/source>`_
+  * To get the latest revision you can clone the `source tree <http://code.google.com/p/pynetdicom/source>`_
     with::
 
-        hg clone https://code.google.com/p/pynetdicom/ 
+        hg clone https://github.com/patmun/pynetdicom 
 
 
 Support
 =======
 
 Please join the `pynetdicom discussion group
-<http://groups.google.com/group/pynetdicom>`_ to ask questions, give
+<https://groups.google.com/forum/#!forum/pynetdicom>`_ to ask questions, give
 feedback, post example code for others -- in other words for any
 discussion about the pynetdicom code. New versions, major bug fixes,
 etc.  will also be announced through the group.
 
 
 
-.. _python: http://www.python.org
-.. _pydicom: http://code.google.com/p/pydicom/
-.. _pip: http://www.pip-installer.org/en/latest/installing.html
-.. _PyPi: http://pypi.python.org/pypi
+.. _python: https://www.python.org
+.. _pydicom: https://github.com/darcymason/pydicom
+.. _pip: https://pypi.python.org/pypi/pip
+.. _PyPi: https://pypi.python.org/pypi
